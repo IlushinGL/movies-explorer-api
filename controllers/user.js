@@ -94,7 +94,7 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-    // аутентификация успешна, пользователь в переменной user
+      // аутентификация успешна, пользователь в переменной user
       const token = jwt.sign(
         { _id: user._id },
         JWT_SECRET,
