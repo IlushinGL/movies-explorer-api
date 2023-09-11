@@ -25,13 +25,13 @@ module.exports.deleteMovieItem = (req, res, next) => {
   Movie.findById(req.params._id)
     .orFail()
     .then((item) => {
-      if (item.owner !== req.user) {
+      if (String(item.owner) !== req.user._id) {
         next(new ForbiddenError('deleteMovieItem: Изменение чужих коллекций запрещено.'));
         return;
       }
       Movie.deleteOne(item)
-        .then((data) => {
-          res.send({ data });
+        .then(() => {
+          res.send(item);
         })
         .catch((err) => {
           next(new InternalServerError(`deleteMovieItem: ${err.message}`));

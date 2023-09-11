@@ -20,7 +20,7 @@ const User = require('../models/user');
 const { SALT_ROUNDS = salt, JWT_SECRET = secret } = process.env;
 
 module.exports.newUser = (req, res, next) => {
-  bcrypt.hash(req.body.password, SALT_ROUNDS)
+  bcrypt.hash(req.body.password, parseInt(SALT_ROUNDS, 10))
     .then((hash) => User.create({
       ...req.body,
       password: hash,
@@ -48,10 +48,14 @@ function setUser(id, data, res, next) {
       runValidators: true,
     },
   )
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
         next(new BadRequestError(`setUser: Валидация. ${err.message}`));
+        return;
+      }
+      if (err.code === 11000) {
+        next(new ConflictError('setUser: Нельзя использовать этот почтовый адрес.'));
         return;
       }
       next(new InternalServerError(`setUser: Обновление. ${err.message}`));
@@ -78,7 +82,7 @@ function getUser(id, res, next) {
 }
 
 module.exports.setUserMe = (req, res, next) => {
-  setUser(req.user._id, { name: req.body.email, about: req.body.name }, res, next);
+  setUser(req.user._id, { email: req.body.email, name: req.body.name }, res, next);
 };
 
 module.exports.getUserMe = (req, res, next) => {
@@ -97,7 +101,7 @@ module.exports.login = (req, res, next) => {
         // токен будет просрочен через неделю после создания
         { expiresIn: '7d' },
       );
-      res.send({ token });
+      res.send(token);
     })
     .catch((err) => {
       // ошибка аутентификации

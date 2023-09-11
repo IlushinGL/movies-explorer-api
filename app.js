@@ -30,4 +30,4 @@ app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(PORT);
+app.listen(parseInt(PORT, 10));

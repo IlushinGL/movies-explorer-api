@@ -13,7 +13,7 @@ const movieSchema = new mongoose.Schema({
   duration: {
     type: Number,
     required: [true, 'не указана длительность фильма'],
-    min: [0, 'Длительность не может быть отрицательной'],
+    min: [0, 'длительность не может быть отрицательной'],
   },
   year: {
     type: String,
@@ -31,7 +31,7 @@ const movieSchema = new mongoose.Schema({
         protocols: ['http', 'https'],
         require_protocol: true,
       }),
-      message: () => 'Некорректный URL постера',
+      message: () => 'некорректный URL постера',
     },
   },
   trailerLink: {
@@ -42,7 +42,7 @@ const movieSchema = new mongoose.Schema({
         protocols: ['http', 'https'],
         require_protocol: true,
       }),
-      message: () => 'Некорректный URL трейлера',
+      message: () => 'некорректный URL трейлера',
     },
   },
   thumbnail: {
@@ -53,7 +53,7 @@ const movieSchema = new mongoose.Schema({
         protocols: ['http', 'https'],
         require_protocol: true,
       }),
-      message: () => 'Некорректный URL миниатюры',
+      message: () => 'некорректный URL миниатюры',
     },
   },
   owner: {

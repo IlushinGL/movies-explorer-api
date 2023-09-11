@@ -1,4 +1,4 @@
-const { NODE_ENV, PORT, FRONT_URL } = process.env;
+const { NODE_ENV = 'develoupment', PORT, FRONT_URL } = process.env;
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const allowedCors = [];
