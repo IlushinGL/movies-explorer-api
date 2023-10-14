@@ -1,10 +1,10 @@
 const { NODE_ENV = 'develoupment', PORT, FRONT_URL } = process.env;
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-
-const allowedCors = [];
-
-allowedCors.push(`https://${FRONT_URL}`);
-allowedCors.push(`https://localhost:${PORT}`);
+const allowedCors = [
+  `https://${FRONT_URL}`,
+  `http://${FRONT_URL}`,
+  `localhost:${PORT}`,
+];
 
 module.exports = (req, res, next) => {
   const { method } = req; // HTTP-метод
@@ -14,9 +14,11 @@ module.exports = (req, res, next) => {
   if (NODE_ENV !== 'production') {
     // в режиме разработки разрешить запросы из любого источника
     res.header('Access-Control-Allow-Origin', '*');
+    next();
   } else if (allowedCors.includes(origin)) {
     // иначе разрешить запросы с указанного источника
     res.header('Access-Control-Allow-Origin', origin);
+    next();
   }
   if (method === 'OPTIONS') {
     // указываем разрешенные типы кросс-доменных запросов
