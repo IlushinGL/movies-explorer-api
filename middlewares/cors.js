@@ -3,21 +3,19 @@ const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const allowedCors = [];
 
-if (NODE_ENV !== 'production') {
-  // в режиме разработки можно обращаться из любого источника
-  allowedCors.push('*');
-} else {
-  allowedCors.push(`https://${FRONT_URL}`);
-  allowedCors.push(`https://localhost:${PORT}`);
-}
+allowedCors.push(`https://${FRONT_URL}`);
+allowedCors.push(`https://localhost:${PORT}`);
 
 module.exports = (req, res, next) => {
   const { method } = req; // HTTP-метод
   const { origin } = req.headers; // источник запроса
   // список заголовков исходного запроса
   const requestHeaders = req.headers['access-control-request-headers'];
-  if (allowedCors.includes(origin)) {
-    // разрешить запросы с указанного источника
+  if (NODE_ENV !== 'production') {
+    // в режиме разработки разрешить запросы из любого источника
+    res.header('Access-Control-Allow-Origin', '*');
+  } else if (allowedCors.includes(origin)) {
+    // иначе разрешить запросы с указанного источника
     res.header('Access-Control-Allow-Origin', origin);
   }
   if (method === 'OPTIONS') {
