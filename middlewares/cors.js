@@ -3,10 +3,10 @@ const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 const allowedCors = [
   `https://${FRONT_URL}`,
   `http://${FRONT_URL}`,
-  `localhost:${PORT}`,
+  `http://localhost:${PORT}`,
 ];
 
-module.exports = (req, res, next) => {
+module.exports = (req, res) => {
   const { method } = req; // HTTP-метод
   const { origin } = req.headers; // источник запроса
   // список заголовков исходного запроса
@@ -28,5 +28,5 @@ module.exports = (req, res, next) => {
     // иначе разрешить запросы с указанного источника
     res.header('Access-Control-Allow-Origin', origin);
   }
-  return next();
+  return res.end();
 };
