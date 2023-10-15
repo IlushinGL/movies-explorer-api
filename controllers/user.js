@@ -101,7 +101,7 @@ module.exports.login = (req, res, next) => {
         // токен будет просрочен через неделю после создания
         { expiresIn: '7d' },
       );
-      res.send(token);
+      res.send({ token: String(token) });
     })
     .catch((err) => {
       // ошибка аутентификации

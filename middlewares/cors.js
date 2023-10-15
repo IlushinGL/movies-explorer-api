@@ -15,19 +15,19 @@ module.exports = (req, res, next) => {
   if (method === 'OPTIONS') {
     // указываем разрешенные типы кросс-доменных запросов
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    // подтверждаем заголовки запроса
+    // подтверждаем возможность обработки небеопасных заголовков
     res.header('Access-Control-Allow-Headers', requestHeaders);
-    // разрешить запросы с любого источника
+    // предварительно разрешаем запросы с любого источника
     res.header('Access-Control-Allow-Origin', '*');
     // возвращаем ответ клиенту
     return res.end();
   }
 
   if (NODE_ENV !== 'production') {
-    // в режиме разработки разрешить запросы из любого источника
+    // в режиме разработки разрешаем запросы из любого источника
     res.header('Access-Control-Allow-Origin', '*');
   } else if (allowedCors.includes(origin)) {
-    // иначе разрешить запросы с указанного источника
+    // иначе ограничиваем источник списком разрешенных
     res.header('Access-Control-Allow-Origin', origin);
   }
   return next();
