@@ -6,7 +6,7 @@ const allowedCors = [
   `http://localhost:${PORT}`,
 ];
 
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   const { method } = req; // HTTP-метод
   const { origin } = req.headers; // источник запроса
   // список заголовков исходного запроса
@@ -28,5 +28,5 @@ module.exports = (req, res) => {
     // иначе разрешить запросы с указанного источника
     res.header('Access-Control-Allow-Origin', origin);
   }
-  return res.end();
+  return next();
 };
