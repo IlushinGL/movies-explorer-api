@@ -17,6 +17,8 @@ module.exports = (req, res, next) => {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
     // подтверждаем заголовки запроса
     res.header('Access-Control-Allow-Headers', requestHeaders);
+    // разрешить запросы с любого источника
+    res.header('Access-Control-Allow-Origin', '*');
     // возвращаем ответ клиенту
     return res.end();
   }
