@@ -14,6 +14,10 @@ const NotFoundError = require('../utils/errors/not-found-err');
 const Movie = require('../models/movie');
 
 module.exports.getMoviesCollection = (req, res, next) => {
+  if (!req.user) {
+    next(new ForbiddenError('getMoviesCollection: Требуется авторизация.'));
+    return;
+  }
   Movie.find({ owner: req.user })
     .then((movies) => res.send(movies))
     .catch((err) => {
