@@ -22,13 +22,12 @@ module.exports.getMoviesCollection = (req, res, next) => {
 };
 
 module.exports.deleteMovieItem = (req, res, next) => {
+  if (req.body.owner !== req.user._id) {
+    next(new ForbiddenError('deleteMovieItem: Изменение чужих коллекций запрещено.'));
+    return;
+  }
   Movie.findById(req.params._id)
-    .orFail()
     .then((item) => {
-      if (String(item.owner) !== req.user._id) {
-        next(new ForbiddenError('deleteMovieItem: Изменение чужих коллекций запрещено.'));
-        return;
-      }
       Movie.deleteOne(item)
         .then(() => {
           res.send(item);
