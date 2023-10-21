@@ -51,8 +51,12 @@ module.exports.deleteMovieItem = (req, res, next) => {
 };
 
 module.exports.createMovieItem = (req, res, next) => {
-  Movie.create({ ...req.body, owner: req.user })
-    .then((item) => res.status(CREATED).send(item))
+  if (req.body.owner !== req.user._id) {
+    next(new ForbiddenError('createMovieItem: Изменение чужих коллекций запрещено.'));
+    return;
+  }
+  Movie.create(req.body)
+    .then((item) => { res.status(CREATED).send(item); })
     .catch((err) => {
       if (err instanceof ValidationError) {
         next(new BadRequestError(`createMovieItem: Проверка. ${err.message}`));
